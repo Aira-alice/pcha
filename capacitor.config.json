@@ -1,0 +1,6 @@
+{
+  "appId": "com.imda.pchat",
+  "appName": "Pchat",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}
