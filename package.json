@@ -1,0 +1,15 @@
+{
+  "name": "pchat",
+  "version": "1.0.0",
+  "description": "Pchat - chat & game app (offline / online / local online)",
+  "scripts": {
+    "sync": "npx cap sync"
+  },
+  "dependencies": {
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/android": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0"
+  }
+}
