@@ -36,21 +36,25 @@ jobs:
           echo "$DEBUG_KEYSTORE_BASE64" | base64 -d > ~/.android/debug.keystore
 
       - run: npx cap sync android
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: "[DEBUG] Cek SHA-1 keystore & isi google-services.json"
+      - name: "[DEBUG] Cek isi google-services.json (angka saja, tidak disensor)"
         run: |
-          echo "===== SHA-1 keystore yang dipakai build ini ====="
+          echo "SHA-1 keystore build ini:"
           keytool -list -v -keystore ~/.android/debug.keystore -storepass android -alias androiddebugkey | grep "SHA1:"
-          echo "Harus SAMA PERSIS dengan: 84:03:75:AC:3E:5C:EA:77:66:71:04:A2:A6:07:1F:5A:63:37:64:D7"
           echo ""
-          echo "===== package_name & oauth_client di google-services.json ====="
-          grep -A2 "package_name" android/app/google-services.json
-          echo "---"
-          grep -B1 -A5 "client_type" android/app/google-services.json
+          SHA1_NOCOLON=$(echo "84:03:75:AC:3E:5C:EA:77:66:71:04:A2:A6:07:1F:5A:63:37:64:D7" | tr -d ':' | tr 'A-Z' 'a-z')
+          echo "Jumlah SHA-1 kita ditemukan di google-services.json (harus >= 1):"
+          grep -o -i "$SHA1_NOCOLON" android/app/google-services.json | wc -l
+          echo ""
+          echo "Jumlah OAuth client tipe Android / client_type:1 di file (harus >= 1):"
+          grep -o '"client_type": *1' android/app/google-services.json | wc -l
+          echo ""
+          echo "Jumlah package_name com.imda.pchat cocok di file (harus >= 1):"
+          grep -c "com.imda.pchat" android/app/google-services.json
 
       - run: cd android && chmod +x gradlew && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
