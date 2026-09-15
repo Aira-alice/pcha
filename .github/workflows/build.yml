@@ -40,6 +40,18 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: "[DEBUG] Cek SHA-1 keystore & isi google-services.json"
+        run: |
+          echo "===== SHA-1 keystore yang dipakai build ini ====="
+          keytool -list -v -keystore ~/.android/debug.keystore -storepass android -alias androiddebugkey | grep "SHA1:"
+          echo "Harus SAMA PERSIS dengan: 84:03:75:AC:3E:5C:EA:77:66:71:04:A2:A6:07:1F:5A:63:37:64:D7"
+          echo ""
+          echo "===== package_name & oauth_client di google-services.json ====="
+          grep -A2 "package_name" android/app/google-services.json
+          echo "---"
+          grep -B1 -A5 "client_type" android/app/google-services.json
+
       - run: cd android && chmod +x gradlew && ./gradlew assembleDebug
       - uses: actions/upload-artifact@v4
         with:
