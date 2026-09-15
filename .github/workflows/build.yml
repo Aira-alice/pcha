@@ -53,6 +53,9 @@ jobs:
           echo "Jumlah OAuth client tipe Android / client_type:1 di file (harus >= 1):"
           grep -o '"client_type": *1' android/app/google-services.json | wc -l
           echo ""
+          echo "Jumlah OAuth client tipe Web / client_type:3 di file (harus >= 1, ini yang dipakai plugin buat ambil ID token):"
+          grep -o '"client_type": *3' android/app/google-services.json | wc -l
+          echo ""
           echo "Jumlah package_name com.imda.pchat cocok di file (harus >= 1):"
           grep -c "com.imda.pchat" android/app/google-services.json
 
