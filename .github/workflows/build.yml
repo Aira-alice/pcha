@@ -60,6 +60,15 @@ jobs:
           grep -c "com.imda.pchat" android/app/google-services.json
 
       - run: cd android && chmod +x gradlew && ./gradlew assembleDebug
+
+      - name: "[DEBUG] SHA-1 SEBENARNYA yang menandatangani APK jadi"
+        run: |
+          echo "Ini SHA-1 sertifikat yang benar-benar dipakai menandatangani app-debug.apk:"
+          keytool -printcert -jarfile android/app/build/outputs/apk/debug/app-debug.apk | grep -i "SHA1:"
+          echo ""
+          echo "Harus SAMA PERSIS dengan yang terdaftar di Firebase:"
+          echo "84:03:75:AC:3E:5C:EA:77:66:71:04:A2:A6:07:1F:5A:63:37:64:D7"
+
       - uses: actions/upload-artifact@v4
         with:
           name: app-debug
