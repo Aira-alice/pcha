@@ -34,13 +34,11 @@ jobs:
         run: |
           mkdir -p ~/.android
           echo "$DEBUG_KEYSTORE_BASE64" | base64 -d > ~/.android/debug.keystore
+          ls -la ~/.android/debug.keystore
 
-      - name: Timpa debug.keystore BAWAAN Capacitor (ini yang beneran dipakai signing, bukan ~/.android)
+      - name: Paksa Gradle pakai keystore kita (jangan andalkan default Gradle)
         run: |
-          find android -iname "*.keystore" -o -iname "*.jks" | while read -r f; do
-            echo "Menimpa: $f"
-            cp ~/.android/debug.keystore "$f"
-          done
+          sed -i "s#^android {#android {\n    signingConfigs {\n        debug {\n            storeFile file(System.getenv('HOME') + '/.android/debug.keystore')\n            storePassword 'android'\n            keyAlias 'androiddebugkey'\n            keyPassword 'android'\n        }\n    }\n    buildTypes {\n        debug {\n            signingConfig signingConfigs.debug\n        }\n    }#" android/app/build.gradle
 
       - run: npx cap sync android
       - uses: actions/setup-java@v5
