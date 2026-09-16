@@ -35,6 +35,13 @@ jobs:
           mkdir -p ~/.android
           echo "$DEBUG_KEYSTORE_BASE64" | base64 -d > ~/.android/debug.keystore
 
+      - name: Timpa debug.keystore BAWAAN Capacitor (ini yang beneran dipakai signing, bukan ~/.android)
+        run: |
+          find android -iname "*.keystore" -o -iname "*.jks" | while read -r f; do
+            echo "Menimpa: $f"
+            cp ~/.android/debug.keystore "$f"
+          done
+
       - run: npx cap sync android
       - uses: actions/setup-java@v5
         with:
